@@ -33,6 +33,7 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
 
     private EditText user_mail, user_name, user_pass, confirm_pass;
     private ProgressDialog progressDialog;
+    private String companyID;
 
     private Spinner spinner;
     private ArrayList<Company> companies;
@@ -71,7 +72,7 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
             final String mail = user_mail.getText().toString();
             final String uname = user_name.getText().toString();
             final String pass = user_pass.getText().toString();
-            final String cpass =confirm_pass.getText().toString();
+            final String cpass = confirm_pass.getText().toString();
 
             if (mail.equals("")){
                 Toast.makeText(Register.this, "Please fill in email field", Toast.LENGTH_SHORT).show();
@@ -123,6 +124,7 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
                         hashMap.put("usermail", mail);
                         hashMap.put("password", pass);
                         hashMap.put("username", uname);
+                        hashMap.put("company", companyID);
 
                         Log.d("request", "sending request");
 
@@ -180,13 +182,15 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        companyID = parent.getItemAtPosition(position).toString();
+        Log.e("company id : " , companyID);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 
     private class GetCompanies extends AsyncTask<Void, Void, Void>{
 
@@ -195,6 +199,7 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
             super.onPreExecute();
             progressDialog = new ProgressDialog(Register.this);
             progressDialog.setMessage("Fetching companies");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -237,7 +242,8 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
     private void populateSpinner() {
         List<String> stringList = new ArrayList<>();
         for (int i = 0; i< companies.size(); i++){
-            stringList.add(companies.get(i).getCname());
+            //stringList.add(companies.get(i).getCname());
+            stringList.add(companies.get(i).getCid());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringList);

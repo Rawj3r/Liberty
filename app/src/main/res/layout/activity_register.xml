@@ -123,7 +123,9 @@
         android:layout_marginRight="40dp"
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></Spinner>
+        android:textColor="@color/textColor"
+        android:background="@drawable/spinner_nb"
+        android:layout_height="33sp"></Spinner>
 
     <EditText
         android:layout_width="match_parent"

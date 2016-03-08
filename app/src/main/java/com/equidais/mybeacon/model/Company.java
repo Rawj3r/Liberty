@@ -7,6 +7,7 @@ public class Company {
 
     private int id;
     private String cname;
+    private String cid;
 
     public Company(){}
 
@@ -29,5 +30,13 @@ public class Company {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getCid() {
+        return cid;
+    }
+
+    public void setCid(String cid) {
+        this.cid = cid;
     }
 }
