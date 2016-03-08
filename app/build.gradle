@@ -4,12 +4,15 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.0"
 
+    useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
         applicationId "com.equidais.mybeacon"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+
     }
     buildTypes {
         release {
@@ -17,6 +20,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -27,4 +31,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
     compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.android.support:support-v4:23.1.1'
+    compile 'org.apache.httpcomponents:httpclient:4.5'
+    compile 'org.apache.httpcomponents:httpcore:4.4.3'
 }

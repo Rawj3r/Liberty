@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -16,16 +17,19 @@ import com.equidais.mybeacon.R;
 import com.equidais.mybeacon.controller.JSONParser;
 import com.equidais.mybeacon.controller.common.BaseActivity;
 import com.equidais.mybeacon.controller.login.LoginActivity;
+import com.equidais.mybeacon.controller.service.ServiceHandler;
 import com.equidais.mybeacon.model.Company;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
-public class Register extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
+public class Register extends BaseActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
 
     private EditText user_mail, user_name, user_pass, confirm_pass;
     private ProgressDialog progressDialog;
@@ -49,8 +53,8 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
         confirm_pass = (EditText) findViewById(R.id.edit_password_con);
         findViewById(R.id.btn_signup).setOnClickListener(this);
         spinner = (Spinner) findViewById(R.id.select_com);
-        spinner.setOnItemClickListener(this);
-        companies = new ArrayList<Company>();
+        spinner.setOnItemSelectedListener(this);
+        companies = new ArrayList<>();
         new GetCompanies().execute();
     }
 
@@ -174,26 +178,72 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
 
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     private class GetCompanies extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog = new ProgressDialog(Register.this);
+            progressDialog.setMessage("Fetching companies");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         }
 
         @Override
         protected Void doInBackground(Void... params) {
+            ServiceHandler handler = new  ServiceHandler();
+            String s = handler.makeServiceCall(URL_COMPANIES, ServiceHandler.GET);
+            Log.e("Response: ", "" + s);
+            if (s != null){
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
+                    if (jsonObject != null){
+                        JSONArray comp = jsonObject.getJSONArray("companies");
+                        for (int i = 0; i < comp.length(); i++){
+                            JSONObject comOb = (JSONObject) comp.get(i);
+                            Company company = new Company(comOb.getInt("company_ID"), comOb.getString("company_Name"));
+                            companies.add(company);
+                        }
+                    }
+                }catch (JSONException sex){
+                    sex.printStackTrace();
+                }
+            }else {
+                Log.e("Error: ","Couldn't get companies");
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            if (progressDialog.isShowing()){
+                progressDialog.dismiss();
+                populateSpinner();
+            }
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    private void populateSpinner() {
+        List<String> stringList = new ArrayList<>();
+        for (int i = 0; i< companies.size(); i++){
+            stringList.add(companies.get(i).getCname());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
     }
+
 }
