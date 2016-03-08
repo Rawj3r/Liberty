@@ -7,32 +7,38 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.equidais.mybeacon.R;
-import com.equidais.mybeacon.common.GlobalFunc;
 import com.equidais.mybeacon.controller.JSONParser;
 import com.equidais.mybeacon.controller.common.BaseActivity;
 import com.equidais.mybeacon.controller.login.LoginActivity;
+import com.equidais.mybeacon.model.Company;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class Register extends BaseActivity implements View.OnClickListener{
+public class Register extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
-    EditText user_mail, user_name, user_pass, confirm_pass;
+    private EditText user_mail, user_name, user_pass, confirm_pass;
+    private ProgressDialog progressDialog;
+
+    private Spinner spinner;
+    private ArrayList<Company> companies;
+    private String URL_COMPANIES = "http://masscash.empirestate.co.za/GenyaApi/X/firm.php";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_register);
-
         link();
     }
 
@@ -42,6 +48,10 @@ public class Register extends BaseActivity implements View.OnClickListener{
         user_pass = (EditText) findViewById(R.id.edit_password);
         confirm_pass = (EditText) findViewById(R.id.edit_password_con);
         findViewById(R.id.btn_signup).setOnClickListener(this);
+        spinner = (Spinner) findViewById(R.id.select_com);
+        spinner.setOnItemClickListener(this);
+        companies = new ArrayList<Company>();
+        new GetCompanies().execute();
     }
 
     public void goLogin(View view){
@@ -87,7 +97,6 @@ public class Register extends BaseActivity implements View.OnClickListener{
             class AddUser extends AsyncTask<String,String, JSONObject>{
 
                 JSONParser jsonParser = new JSONParser();
-                ProgressDialog progressDialog;
 
                 private static final String TAG_SUCCESS = "success";
                 private static final String TAG_MESSAGE = "message";
@@ -162,6 +171,29 @@ public class Register extends BaseActivity implements View.OnClickListener{
             new AddUser().execute();
 
         }
+
+    }
+
+    private class GetCompanies extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     }
 }

@@ -61,4 +61,7 @@ That’s it. That’s all you have to do, the app will automatically start track
     <string name="password_con">Confirm Password</string>
     <string name="new_user">New user?</string>
     <string name="already_a_user">Already a user?</string>
+    <string name="fname">Full Name</string>
+    <string name="lname">Last Name</string>
+    <string name="emp_no">Employee Number</string>
 </resources>
