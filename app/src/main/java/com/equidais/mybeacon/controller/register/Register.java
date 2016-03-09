@@ -144,8 +144,8 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
                 protected JSONObject doInBackground(String... params) {
                     try {
                         HashMap<String, String> hashMap = new HashMap<>();
-                        hashMap.put("usermail", mail);
-                        hashMap.put("password", pass);
+                        hashMap.put("fusermail", mail);
+                        hashMap.put("fpassword", pass);
                         hashMap.put("company", companyID);
                         hashMap.put("fname", fname_);
                         hashMap.put("lname", lname_);
