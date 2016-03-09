@@ -49,14 +49,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         mEditEmail = (EditText)findViewById(R.id.edit_email);
         mEditPassword = (EditText)findViewById(R.id.edit_password);
         findViewById(R.id.btn_login).setOnClickListener(this);
-        if (LocalData.getUserID(this) > 0){
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+        if (!loadSha().equals("")){
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
         }
 
-     //   beatconTest();
     }
+
+    public String loadSha(){
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Storedata", 0);
+        String usermail = sharedPreferences.getString("username", "");
+        return usermail;
+    }
+
 
     public void newAct(View view){
         Intent intent = new Intent(getApplicationContext(), Register.class);
@@ -170,7 +177,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         HashMap<String, String> hashMap = new HashMap<>();
                         hashMap.put("user_Email", email);
                         hashMap.put("user_Password", password);
-                        hashMap.put("method", "UserLoginSEL");
 
                         Log.d("request", "sending request");
 

@@ -2,6 +2,7 @@ package com.equidais.mybeacon.controller;
 
 import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ public class MainApplication extends Application  implements BeaconManagerListen
     String mBeaconUDID = "";
     public Date mInTime;
     public Date mOutTime;
+    String usermail;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -49,6 +51,12 @@ public class MainApplication extends Application  implements BeaconManagerListen
         Intent intent = new Intent();
         intent.setClass(this, MyService.class);
         startService(intent);
+    }
+
+    public String loadSha(){
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Storedata", 0);
+        usermail = sharedPreferences.getString("username", "");
+        return usermail;
     }
 
     /**
@@ -161,13 +169,12 @@ public class MainApplication extends Application  implements BeaconManagerListen
     }
 
     private void upateData(String beaconUDID){
-        if (LocalData.getUserID(this) > 0){
+
             Map<String, Object> map = new HashMap<>();
-            map.put("userid", LocalData.getUserID(this));
+            map.put("usermail", loadSha());
             map.put("uuid", beaconUDID);
             map.put("deviceudid", GlobalFunc.getDeviceUDID(this));
             map.put("timein", GlobalFunc.getStringParamDate(mInTime));
-            map.put("timeout", GlobalFunc.getStringParamDate(mOutTime));
             ApiClient.getApiClient().sendData(map, new Callback<Integer>() {
                 @Override
                 public void success(Integer integer, Response response) {
@@ -179,7 +186,7 @@ public class MainApplication extends Application  implements BeaconManagerListen
 
                 }
             });
-        }
+
     }
 
 
