@@ -31,7 +31,7 @@ import java.util.List;
 
 public class Register extends BaseActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
 
-    private EditText user_mail, user_name, user_pass, confirm_pass;
+    private EditText user_mail, fnme, lname, empno, user_pass, confirm_pass;
     private ProgressDialog progressDialog;
     private String companyID;
 
@@ -48,13 +48,16 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
     }
 
     public void link(){
+        fnme = (EditText) findViewById(R.id.edit_fname);
+        lname = (EditText) findViewById(R.id.edit_lname);
+        empno = (EditText) findViewById(R.id.edit_emp_no);
         user_mail = (EditText) findViewById(R.id.edit_email);
-        user_name = (EditText) findViewById(R.id.edit_name_user);
         user_pass = (EditText) findViewById(R.id.edit_password);
         confirm_pass = (EditText) findViewById(R.id.edit_password_con);
-        findViewById(R.id.btn_signup).setOnClickListener(this);
+
         spinner = (Spinner) findViewById(R.id.select_com);
         spinner.setOnItemSelectedListener(this);
+        findViewById(R.id.btn_signup).setOnClickListener(this);
         companies = new ArrayList<>();
         new GetCompanies().execute();
     }
@@ -70,27 +73,40 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
 
         if (v.getId() == R.id.btn_signup){
             final String mail = user_mail.getText().toString();
-            final String uname = user_name.getText().toString();
+            final String lname_ = lname.getText().toString();
+            final String fname_ = fnme.getText().toString();
+            final String emp_ = empno.getText().toString();
             final String pass = user_pass.getText().toString();
             final String cpass = confirm_pass.getText().toString();
+            final String active = "1";
 
-            if (mail.equals("")){
-                Toast.makeText(Register.this, "Please fill in email field", Toast.LENGTH_SHORT).show();
+            if (lname_.equals("")){
+                Toast.makeText(getApplicationContext(), "Please input last name", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (uname.equals("")){
-                Toast.makeText(Register.this, "Please fill in username field", Toast.LENGTH_SHORT).show();
+            if (emp_.equals("")){
+                Toast.makeText(getApplicationContext(), "Please input employee number", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (mail.equals("")){
+                Toast.makeText(Register.this, "Please input email", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (fname_.equals("")){
+                Toast.makeText(getApplicationContext(), "Please input first name", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (pass.equals("")){
-                Toast.makeText(Register.this, "Please fill in password field", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Register.this, "Please input password", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (cpass.equals("")){
-                Toast.makeText(Register.this, "Please fill in password confirm field", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Register.this, "Please confirm password", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -98,6 +114,13 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
                 Toast.makeText(Register.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            if (companyID.equals("") || companyID.equals("Select Company")){
+                Toast.makeText(getApplicationContext(), "Please select your company", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
 
             class AddUser extends AsyncTask<String,String, JSONObject>{
 
@@ -123,8 +146,11 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
                         HashMap<String, String> hashMap = new HashMap<>();
                         hashMap.put("usermail", mail);
                         hashMap.put("password", pass);
-                        hashMap.put("username", uname);
                         hashMap.put("company", companyID);
+                        hashMap.put("fname", fname_);
+                        hashMap.put("lname", lname_);
+                        hashMap.put("empno", emp_);
+                        hashMap.put("active", active);
 
                         Log.d("request", "sending request");
 
@@ -183,7 +209,6 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         companyID = parent.getItemAtPosition(position).toString();
-        Log.e("company id : " , companyID);
     }
 
     @Override
@@ -242,8 +267,7 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
     private void populateSpinner() {
         List<String> stringList = new ArrayList<>();
         for (int i = 0; i< companies.size(); i++){
-            //stringList.add(companies.get(i).getCname());
-            stringList.add(companies.get(i).getCid());
+            stringList.add(companies.get(i).getCname());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringList);

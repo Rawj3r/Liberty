@@ -95,7 +95,7 @@
         android:textSize="14sp"
         android:padding="7dp"
         android:background="@drawable/back_gray_border"
-        android:id="@+id/edit_name_user"
+        android:id="@+id/edit_emp_no"
         android:hint="@string/emp_no"
         android:inputType="textEmailAddress"
         />
@@ -117,16 +117,6 @@
         android:inputType="textPassword"
         />
 
-    <Spinner
-        android:id="@+id/select_com"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="15dp"
-        android:layout_width="match_parent"
-        android:textColor="@color/textColor"
-        android:background="@drawable/spinner_nb"
-        android:layout_height="33sp"></Spinner>
-
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -142,6 +132,17 @@
         android:hint="@string/password_con"
         android:inputType="textPassword"
         />
+
+
+    <Spinner
+        android:id="@+id/select_com"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:textColor="@color/textColor"
+        android:background="@drawable/spinner_nb"
+        android:layout_height="33sp"></Spinner>
 
     <Button
         android:layout_width="match_parent"
