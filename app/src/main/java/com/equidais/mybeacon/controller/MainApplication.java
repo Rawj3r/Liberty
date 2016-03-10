@@ -115,39 +115,26 @@ public class MainApplication extends Application  implements BeaconManagerListen
         /**
          * Check whether SDK started in logs.
          */
-        Log.e(TAG, beacon.getProximityUUID());
 
+        Log.e(TAG, "new beacon found");
         String beaconUUID = beacon.getProximityUUID();
+        Log.e(TAG, beaconUUID + " new beacon found");
 
-        if (beaconUUID.equals(mBeaconUDID)){
-            if (mState == STATE_INIT){
-
-                mState = STATE_ENTER_DOOR;
+        if (!beaconUUID.equals("")){
                 mInTime = new Date();
                 Log.e(" " , mInTime.toString());
                 upateData(beaconUUID);
+            }else {
 
-            }else{
-                mState = STATE_INIT;
-            }
-        }else{
-            mState = STATE_INIT;
         }
-
 
     }
 
     @Override
     public void onGoneBeacon(Beacon beacon) {
-
-
-
         Log.e(TAG, "gone");
         String beaconUUID = beacon.getProximityUUID();
-
         Log.e(TAG, beaconUUID + " has disappeared");
-
-        mState = STATE_INIT;
 
 
     }
@@ -167,6 +154,7 @@ public class MainApplication extends Application  implements BeaconManagerListen
         DecimalFormat format = new DecimalFormat("#");
         String distance = format.format(beacon.getAccuracy() * 100);
         Log.e(beacon.getSerialNumber(), "" + distance + " cm");
+
     }
 
     private void upateData(String beaconUDID){

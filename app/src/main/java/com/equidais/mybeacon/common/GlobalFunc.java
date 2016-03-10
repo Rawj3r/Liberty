@@ -215,7 +215,7 @@ public class GlobalFunc {
 
 
     public static String getStringParamDate(Date date){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try{
             return format.format(date);
         }catch (Exception e){
