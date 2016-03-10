@@ -123,7 +123,8 @@ public class MainApplication extends Application  implements BeaconManagerListen
             if (mState == STATE_INIT){
 
                 mState = STATE_ENTER_DOOR;
-
+                mInTime = new Date();
+                Log.e(" " , mInTime.toString());
                 upateData(beaconUUID);
 
             }else{

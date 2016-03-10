@@ -66,7 +66,7 @@ public class ApiClient {
         public void addGymVisitFeedback(@Body Map<String, Object> options, Callback<Integer> cb);
 
         //------------AddPersonGymVisit----------------------
-        @POST("/index.php")
+        @POST("/untitled.php")
         public void sendData(@Body Map<String, Object> options, Callback<Integer> cb);
 
         //------------Register Push id----------------------

@@ -2,7 +2,7 @@ package com.equidais.mybeacon.common;
 
 
 public class GlobalConst {
-    public static final String API_ROOT = "http://masscash.empirestate.co.za/GenyaApi/PHP";
+    public static final String API_ROOT = "http://masscash.empirestate.co.za/GenyaApi/X";
 
 
     public static final String PREF_NAME = "mybeacon";
