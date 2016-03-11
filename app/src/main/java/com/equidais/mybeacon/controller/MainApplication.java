@@ -3,6 +3,7 @@ package com.equidais.mybeacon.controller;
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,6 +16,8 @@ import com.equidais.mybeacon.controller.service.MyService;
 import com.sensoro.beacon.kit.Beacon;
 import com.sensoro.beacon.kit.BeaconManagerListener;
 import com.sensoro.cloud.SensoroManager;
+
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -123,7 +126,8 @@ public class MainApplication extends Application  implements BeaconManagerListen
         if (!beaconUUID.equals("")){
                 mInTime = new Date();
                 Log.e(" " , mInTime.toString());
-                upateData(beaconUUID);
+                //upateData();
+            send();
             }else {
 
         }
@@ -157,12 +161,50 @@ public class MainApplication extends Application  implements BeaconManagerListen
 
     }
 
-    private void upateData(String beaconUDID){
+
+
+    public void send(){
+
+        class sendD extends AsyncTask<String, String, JSONObject>{
+
+            JSONParser jsonParser = new JSONParser();
+            private static final String TAG_SUCCESS = "success";
+            private static final String TAG_MESSAGE = "message";
+            private final String REG_URL = "http://masscash.empirestate.co.za/GenyaApi/X/untitled.php";
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected JSONObject doInBackground(String... params) {
+                try {
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("user_mail", loadSha());
+
+                    Log.e("request", "sending beacon time");
+                    JSONObject jsonObject = jsonParser.makeHttpRequest(REG_URL, "POST", hashMap);
+                    if (jsonObject != null){
+                        Log.e("JSON result", jsonObject.toString());
+                        return jsonObject;
+                    }
+                }catch (Exception e){
+
+                }
+                return null;
+            }
+        }
+        new sendD().execute();
+    }
+
+    private void upateData(){
 
             Map<String, Object> map = new HashMap<>();
-            map.put("usermail", loadSha());
-            map.put("uuid", beaconUDID);
-            map.put("deviceudid", GlobalFunc.getDeviceUDID(this));
+            map.put("user_mail", "m@mail.com");
+        Log.e(TAG, loadSha());
+           // map.put("uuid", beaconUDID);
+           // map.put("deviceudid", GlobalFunc.getDeviceUDID(this));
             map.put("timein", GlobalFunc.getStringParamDate(mInTime));
             ApiClient.getApiClient().sendData(map, new Callback<Integer>() {
                 @Override
