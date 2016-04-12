@@ -207,6 +207,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     if (jsonObject != null){
                         Toast.makeText(LoginActivity.this, jsonObject.toString(),
                                 Toast.LENGTH_SHORT).show();
+                        Log.e("Test " , jsonObject.toString());
 
                         try {
                             success = jsonObject.getInt(TAG_SUCCESS);

@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 
 import com.equidais.mybeacon.R;
 
@@ -12,7 +13,7 @@ import com.equidais.mybeacon.controller.common.BaseActivity;
 import com.sensoro.cloud.SensoroManager;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements ActionBar.OnNavigationListener{
 
     public static final int REQUEST_ENABLE_BT = 3;
 
@@ -51,4 +52,8 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    @Override
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        return false;
+    }
 }

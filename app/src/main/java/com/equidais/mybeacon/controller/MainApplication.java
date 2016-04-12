@@ -124,12 +124,22 @@ public class MainApplication extends Application  implements BeaconManagerListen
         Log.e(TAG, beaconUUID + " new beacon found");
 
         if (!beaconUUID.equals("")){
+            if (mState == STATE_INIT){
+                mState = STATE_ENTER_DOOR;
+            }else if (mState == STATE_IN_ROOM){
+                mState = STATE_OUT_ROOM_ENTER_DOOR;
+                mOutTime = new Date();
+                Log.e(TAG, "Out room");
+            }else if (mState == STATE_ENTER_DOOR){
+                mState = STATE_IN_ROOM;
                 mInTime = new Date();
-                Log.e(" " , mInTime.toString());
-                //upateData();
-            send();
+                Log.e(TAG, "Enter Gym");
+            }
+            else{
+                mState = STATE_ENTER_DOOR;
+            }
             }else {
-
+            mState = STATE_ENTER_DOOR;
         }
 
     }
@@ -140,6 +150,11 @@ public class MainApplication extends Application  implements BeaconManagerListen
         String beaconUUID = beacon.getProximityUUID();
         Log.e(TAG, beaconUUID + " has disappeared");
 
+        if (mState == STATE_ENTER_DOOR){
+            mState = STATE_IN_ROOM;
+        }else{
+            mState = STATE_INIT;
+        }
 
     }
 
@@ -202,7 +217,7 @@ public class MainApplication extends Application  implements BeaconManagerListen
 
             Map<String, Object> map = new HashMap<>();
             map.put("user_mail", "m@mail.com");
-        Log.e(TAG, loadSha());
+            Log.e(TAG, loadSha());
            // map.put("uuid", beaconUDID);
            // map.put("deviceudid", GlobalFunc.getDeviceUDID(this));
             map.put("timein", GlobalFunc.getStringParamDate(mInTime));
