@@ -41,7 +41,7 @@ public class MainApplication extends Application  implements BeaconManagerListen
     String mBeaconUDID = "";
     public Date mInTime;
     public Date mOutTime;
-    String usermail;
+    String username;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -58,8 +58,8 @@ public class MainApplication extends Application  implements BeaconManagerListen
 
     public String loadSha(){
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Storedata", 0);
-        usermail = sharedPreferences.getString("username", "");
-        return usermail;
+        username = sharedPreferences.getString("username", "");
+        return username;
     }
 
     /**
@@ -119,27 +119,27 @@ public class MainApplication extends Application  implements BeaconManagerListen
          * Check whether SDK started in logs.
          */
 
+//        Log.e(TAG, "new beacon found");
+
+
         Log.e(TAG, "new beacon found");
         String beaconUUID = beacon.getProximityUUID();
         Log.e(TAG, beaconUUID + " new beacon found");
 
-        if (!beaconUUID.equals("")){
+        if (!beaconUUID.equals("")) {
             if (mState == STATE_INIT){
                 mState = STATE_ENTER_DOOR;
-            }else if (mState == STATE_IN_ROOM){
-                mState = STATE_OUT_ROOM_ENTER_DOOR;
+                if (mState == STATE_ENTER_DOOR){
+                    mState = STATE_IN_ROOM;
+                    mInTime = new Date();
+                    Log.e(TAG, "Enter Gym " + mInTime);
+                }
+            }else if (mState == STATE_OUT_ROOM_ENTER_DOOR){
+                mState = STATE_INIT;
                 mOutTime = new Date();
-                Log.e(TAG, "Out room");
-            }else if (mState == STATE_ENTER_DOOR){
-                mState = STATE_IN_ROOM;
-                mInTime = new Date();
-                Log.e(TAG, "Enter Gym");
+                send();
+                Log.e(TAG, "Out room" + mOutTime);
             }
-            else{
-                mState = STATE_ENTER_DOOR;
-            }
-            }else {
-            mState = STATE_ENTER_DOOR;
         }
 
     }
@@ -150,10 +150,12 @@ public class MainApplication extends Application  implements BeaconManagerListen
         String beaconUUID = beacon.getProximityUUID();
         Log.e(TAG, beaconUUID + " has disappeared");
 
-        if (mState == STATE_ENTER_DOOR){
-            mState = STATE_IN_ROOM;
-        }else{
-            mState = STATE_INIT;
+        if (mState == STATE_INIT){
+            Log.e(TAG, "Bye I am leaving");
+        }
+
+        if (mState == STATE_IN_ROOM ){
+            mState = STATE_OUT_ROOM_ENTER_DOOR;
         }
 
     }
@@ -197,6 +199,8 @@ public class MainApplication extends Application  implements BeaconManagerListen
                 try {
                     HashMap<String, String> hashMap = new HashMap<>();
                     hashMap.put("user_mail", loadSha());
+                    hashMap.put("time_in", GlobalFunc.getStringParamDate(mInTime));
+                    hashMap.put("time_out", GlobalFunc.getStringParamDate(mOutTime));
 
                     Log.e("request", "sending beacon time");
                     JSONObject jsonObject = jsonParser.makeHttpRequest(REG_URL, "POST", hashMap);

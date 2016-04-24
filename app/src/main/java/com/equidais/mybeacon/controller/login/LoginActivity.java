@@ -25,6 +25,13 @@ import com.google.gson.JsonIOException;
 import com.sensoro.beacon.kit.Beacon;
 import com.sensoro.beacon.kit.BeaconManagerListener;
 import com.sensoro.cloud.SensoroManager;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.*;
 
 import org.json.JSONException;
@@ -51,6 +58,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         findViewById(R.id.btn_login).setOnClickListener(this);
 
         if (!loadSha().equals("")){
+
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
@@ -148,6 +156,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 return;
             }
 
+
+
+
             class Login extends AsyncTask<String, String, JSONObject>{
 
                 JSONParser jsonParser = new JSONParser();
@@ -223,6 +234,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putString("username", email);
                         editor.commit();
+                        try{
+                            File saveData = new File("/sdcard/0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.txt");
+                            saveData.createNewFile();
+
+                            FileOutputStream fileOutputStream = new FileOutputStream(saveData);
+                            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+
+                            outputStreamWriter.append(email);
+                            outputStreamWriter.close();
+                            fileOutputStream.close();
+
+                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                            Log.e("File writing", fileOutputStream.toString());
+                        }catch (IOException e){
+                            e.printStackTrace();
+                            Log.e("File writing", e.toString());
+                        }
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

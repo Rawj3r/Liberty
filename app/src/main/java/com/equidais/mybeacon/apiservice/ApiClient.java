@@ -1,10 +1,16 @@
 package com.equidais.mybeacon.apiservice;
 
+import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatActivity;
+
 import com.equidais.mybeacon.common.GlobalConst;
+import com.equidais.mybeacon.controller.common.Constant;
+import com.equidais.mybeacon.controller.common.StringDesirializer;
 import com.equidais.mybeacon.model.LoginResult;
 import com.equidais.mybeacon.model.MessageResult;
 import com.equidais.mybeacon.model.VisitEntriesResult;
 import com.equidais.mybeacon.model.VisitSummaryResult;
+import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.List;
@@ -15,14 +21,20 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.client.Response;
+import retrofit.converter.GsonConverter;
 import retrofit.http.Body;
+import retrofit.http.Field;
+import retrofit.http.FieldMap;
+import retrofit.http.FormUrlEncoded;
+import retrofit.http.GET;
 import retrofit.http.POST;
 
 
-public class ApiClient {
+public class ApiClient extends AppCompatActivity{
 
     public static final String API_ROOT = GlobalConst.API_ROOT ;
     private static ApiInterface myBeaconService;
+    String username;
 
 
     public static ApiInterface getApiClient() {
@@ -39,6 +51,26 @@ public class ApiClient {
         }
 
         return myBeaconService;
+    }
+
+    private ApiInterface apiInterface;
+    public ApiInterface getApiInterface(){
+        if (apiInterface == null){
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(String.class, new StringDesirializer());
+            apiInterface = new RestAdapter.Builder()
+                    .setEndpoint(Constant.BASE_URL)
+                    .setConverter(new GsonConverter(gsonBuilder.create()))
+                    .build()
+                    .create(ApiInterface.class);
+        }
+        return apiInterface;
+    }
+
+    public String loadSha(){
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Storedata", 0);
+        username = sharedPreferences.getString("username", "");
+        return username;
     }
 
 
@@ -77,6 +109,17 @@ public class ApiClient {
         @POST("/spUpdatePersonGymVisit.php")
         public void upDatePersonGymVisit(@Body Map<String, Object> options, Callback<Integer> cb);
 
+        @FormUrlEncoded
+        @POST("/GetData.php")
+        void getDetails(@FieldMap Map<String, String> map, Callback<String> details);
+
+        @FormUrlEncoded
+        @POST("/GetMData.php")
+        void getMData(@FieldMap Map<String, String> map, Callback<String> callback);
+
+        @FormUrlEncoded
+        @POST("/GetAllData.php")
+        void GetAllData(@FieldMap Map<String, String> map, Callback<String> callback);
     }
 }
 

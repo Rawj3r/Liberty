@@ -1,5 +1,8 @@
 <resources>
 
     <color name="black_overlay">#66000000</color>
+    <color name="app_bg">#F5F5F5</color>
+    <color name="htintColor">#ffcdcdcd</color>
+    <color name="card_color">#FFFFFF</color>
 
 </resources>

@@ -10,7 +10,7 @@
     <color name="grayColor">#ffcdcdcd</color>
     <color name="tabColor">#ff747679</color>
     <color name="tabSelectColor">#ff162b48</color>
-    <color name="redBorderColor">#ffdc291e</color>
+    <color name="redBorderColor">#9e9e9e</color>
     <color name="blueBorderColor">#ff162b48</color>
     <color name="redButtonColor">#ffdc291e</color>
     <color name="blueButtonColor">#ff5eb9b8</color>
@@ -25,4 +25,5 @@
 
     <color name="half_transparent">#80444444</color>
     <color name="transparent">#00000000</color>
+    <color name="greyDeviderBorderColor">#B6B6B6</color>
 </resources>
