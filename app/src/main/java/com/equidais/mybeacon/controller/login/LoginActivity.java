@@ -166,7 +166,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 ProgressDialog progressDialog;
 
 //                String LOGIN_URL = "http://masscash.empirestate.co.za/GenyaApi/X/index.php";
-                String LOGIN = "http://masscash.empirestate.co.za/GenyaApi/X/login.php";
+                String LOGIN = "http://masscash.empirestate.co.za/gravity/login.php";
 
                 private static final String TAG_SUCCESS = "success";
                 private static final String TAG_MESSAGE = "message";
@@ -216,11 +216,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     }
 
                     if (jsonObject != null){
-                        Toast.makeText(LoginActivity.this, jsonObject.toString(),
-                                Toast.LENGTH_SHORT).show();
-                        Log.e("Test " , jsonObject.toString());
+
 
                         try {
+                            Toast.makeText(LoginActivity.this, jsonObject.getString(TAG_MESSAGE).toString(),
+                                    Toast.LENGTH_SHORT).show();
+                            Log.e("Test " , jsonObject.toString());
+
                             success = jsonObject.getInt(TAG_SUCCESS);
                             message = jsonObject.getString(TAG_MESSAGE);
                         }catch (JSONException e){
@@ -245,7 +247,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                             outputStreamWriter.close();
                             fileOutputStream.close();
 
-                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                             Log.e("File writing", fileOutputStream.toString());
                         }catch (IOException e){
                             e.printStackTrace();

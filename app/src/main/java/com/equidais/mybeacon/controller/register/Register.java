@@ -37,7 +37,7 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
 
     private Spinner spinner;
     private ArrayList<Company> companies;
-    private String URL_COMPANIES = "http://masscash.empirestate.co.za/GenyaApi/X/firm.php";
+    private String URL_COMPANIES = "http://masscash.empirestate.co.za/gravity/firm.php";
 
 
     @Override
@@ -50,7 +50,6 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
     public void link(){
         fnme = (EditText) findViewById(R.id.edit_fname);
         lname = (EditText) findViewById(R.id.edit_lname);
-        empno = (EditText) findViewById(R.id.edit_emp_no);
         user_mail = (EditText) findViewById(R.id.edit_email);
         user_pass = (EditText) findViewById(R.id.edit_password);
         confirm_pass = (EditText) findViewById(R.id.edit_password_con);
@@ -75,7 +74,6 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
             final String mail = user_mail.getText().toString();
             final String lname_ = lname.getText().toString();
             final String fname_ = fnme.getText().toString();
-            final String emp_ = empno.getText().toString();
             final String pass = user_pass.getText().toString();
             final String cpass = confirm_pass.getText().toString();
             final String active = "1";
@@ -85,10 +83,10 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
                 return;
             }
 
-            if (emp_.equals("")){
-                Toast.makeText(getApplicationContext(), "Please input employee number", Toast.LENGTH_SHORT).show();
-                return;
-            }
+//            if (emp_.equals("")){
+//                Toast.makeText(getApplicationContext(), "Please input employee number", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
 
             if (mail.equals("")){
                 Toast.makeText(Register.this, "Please input email", Toast.LENGTH_SHORT).show();
@@ -128,7 +126,7 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
 
                 private static final String TAG_SUCCESS = "success";
                 private static final String TAG_MESSAGE = "message";
-                private final String REG_URL = "http://masscash.empirestate.co.za/GenyaApi/X/register.php";
+                private final String REG_URL = "http://masscash.empirestate.co.za/gravity/register.php";
 
                 @Override
                 protected void onPreExecute() {
@@ -149,7 +147,7 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
                         hashMap.put("company", companyID);
                         hashMap.put("fname", fname_);
                         hashMap.put("lname", lname_);
-                        hashMap.put("empno", emp_);
+                        hashMap.put("empno", "null");
                         hashMap.put("active", active);
 
                         Log.d("request", "sending request");
@@ -180,9 +178,10 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
                     }
 
                     if (jsonObject != null){
-                        Toast.makeText(Register.this, jsonObject.toString(), Toast.LENGTH_SHORT).show();
+
 
                         try {
+                            Toast.makeText(Register.this, jsonObject.getString(TAG_MESSAGE).toString(), Toast.LENGTH_SHORT).show();
                             success = jsonObject.getInt(TAG_SUCCESS);
                             message = jsonObject.getString(TAG_MESSAGE);
                         }catch (JSONException je){

@@ -222,4 +222,20 @@ public class GlobalFunc {
             return "";
         }
     }
+
+    public static void noConnectionDlg(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        //set title
+        builder.setTitle("Please retry");
+
+        //set dialog message
+        builder.setMessage("Please connect your device to the internet").setCancelable(false);
+
+        // create alert dialog
+        AlertDialog alertDialog = builder.create();
+
+        // display dialog alert
+        alertDialog.show();
+    }
 }

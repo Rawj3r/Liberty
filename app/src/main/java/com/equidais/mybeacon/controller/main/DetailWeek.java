@@ -30,6 +30,7 @@ public class DetailWeek extends Fragment implements Controller.HomeCallBackListe
         super.onCreate(savedInstanceState);
 
         controller = new Controller(DetailWeek.this);
+        controller.startFetching();
 
 
     }
@@ -50,8 +51,6 @@ public class DetailWeek extends Fragment implements Controller.HomeCallBackListe
 
         weekDapter = new DetailWeekDapter(modelList);
         recyclerView.setAdapter(weekDapter);
-
-        controller.startFetching();
 
         return view;
     }

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,10 +41,17 @@ public class TotalFragment extends Fragment {
     private int week_num_visits;
     TextView visits_count, avg_dur, curr_visit_dur, last_date;
     boolean mIsFinish = false;
-
+    public Context context = getContext();
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(broadcastReceiver);
+        mIsFinish = true;
     }
 
     @Nullable
@@ -58,13 +68,20 @@ public class TotalFragment extends Fragment {
 
         showState();
 
+
+
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         IntentFilter filter = new IntentFilter();
         filter.addAction("changeState");
         getActivity().registerReceiver(broadcastReceiver, filter);
         handler.sendEmptyMessageDelayed(0, 1000);
-
-        return view;
     }
+
 
     public String loadSha(){
         SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences("Storedata", 0);
@@ -92,13 +109,7 @@ public class TotalFragment extends Fragment {
         }
     };
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getActivity().unregisterReceiver(broadcastReceiver);
-        mIsFinish = true;
 
-    }
 
     public BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -155,16 +166,39 @@ public class TotalFragment extends Fragment {
                 dialog.dismiss();
             }
 
-            try {
-                JSONArray jsonArray = object.getJSONArray("data");
-                JSONObject object1 = jsonArray.getJSONObject(0);
+            ConnectivityManager manager =  (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo info = manager.getActiveNetworkInfo();
+            boolean connected = info != null && info.isAvailable() && info.isConnectedOrConnecting();
 
-                week_num_visits = object1.getInt("VisitCount");
-                avg_duration = object1.getString("AvgVisitDuration");
-                last_d = object1.getString("LastVisitDate");
+            if (connected){
 
-            }catch (JSONException c){
-                c.printStackTrace();
+                try{
+                    JSONArray jsonArray = object.getJSONArray("data");
+                    JSONObject object1 = jsonArray.getJSONObject(0);
+                    week_num_visits = object1.getInt("VisitCount");
+                    avg_duration = object1.getString("AvgVisitDuration");
+                    last_d = object1.getString("LastVisitDate");
+                    Log.e("test", ""+week_num_visits);
+
+                }catch (JSONException d){
+                    d.printStackTrace();
+                }
+
+                if (info.getType() == ConnectivityManager.TYPE_WIMAX || info.getType() == ConnectivityManager.TYPE_MOBILE){
+
+                }
+            }else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                //set title
+                builder.setTitle("Please retry");
+
+                //set dialog message
+                builder.setMessage("Please connect your device to the internet").setCancelable(true);
+                // create alert dialog
+                AlertDialog alertDialog = builder.create();
+                // display dialog alert
+                alertDialog.show();
             }
 
             getActivity().runOnUiThread(new Runnable() {

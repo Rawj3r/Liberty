@@ -7,7 +7,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.equidais.mybeacon"
+        applicationId "com.equidais.gym"
         minSdkVersion 19
         targetSdkVersion 22
         versionCode 1

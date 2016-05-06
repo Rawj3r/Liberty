@@ -60,8 +60,6 @@ public class LocalData {
 
             rrr = builder.toString();
 
-            Log.e("get email", rrr);
-
         }catch(IOException e){
             e.printStackTrace();
         }

@@ -18,9 +18,13 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
+            android:titleTextColor="#FFF"
+            android:subtitleTextColor="#FFF"
+            app:subtitleTextColor="#FFF"
+            app:titleTextColor="#FFF"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/toolbarColor"
             app:layout_scrollFlags="scroll|enterAlways" />
 
 
@@ -31,10 +35,10 @@
             android:id="@+id/tabLayout"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:background="#FFF"
+            android:background="@color/toolbarColor"
             app:tabMode="scrollable"
-            app:tabTextColor="#000"
-            app:tabSelectedTextColor="#000"
+            app:tabTextColor="#FFF"
+            app:tabSelectedTextColor="#FFF"
             app:tabGravity="fill"/>
 
         <android.support.v4.view.ViewPager
@@ -49,9 +53,10 @@
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        app:itemTextColor="#FFF"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:background="@color/htintColor"
+        android:background="#6D1111"
         app:menu="@menu/activity_main_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

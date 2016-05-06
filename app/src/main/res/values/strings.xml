@@ -37,21 +37,12 @@
     <string name="alert_welcome">Welcome to MyBeacon.</string>
     <string name="alert_thank">Thank you for using MyBeacon. Please visit us again.</string>
 
-    <string name="contact_us"><![CDATA[<i>Getting in touch is easy - we would love to hear from you. Click the feedback button above or contact us directly at:</i>\n\n
-<br><br>
-info@equidais.com
-<br>
-+27 (012) 003 3226
-<br><br>
-Thank you for taking part in the Multiply pilot. We look forward to hearing your feedback related to the app and your experience whilst using it.
-<br><br>
-<b>Using the app</b>
-<br><br>
+    <string name="about"><![CDATA[
 The app has been created as simply as possible to make the user experience as seamless as possible.
-<br><br>
-Once you install the app and open it for the first time you will be asked to grant it permission to use your location even when it is not open. This is so that the app can see the beacons when you enter, exit and move through the gym. <i>We will not track your location at any other time without your consent.</i> If you do not grant the app the permission it requires, it will not function correctly. If you accidentally tell the app it cannot use your location, you can change this in the app settings found in the settings section of your device.
-<br><br>
-That’s it. That’s all you have to do, the app will automatically start tracking your visits to the gym. You can view summaries of your data in the app, as well as individual visits. We will also be sending you messages from time to time regarding the pilot which will be available in the messages tab to keep you updated with all the latest news.]]></string>
+Once you install the app and open it for the first time you will be asked to grant it permission to use your location even when it is not open. This is so that the app can see the beacons when you enter, exit and move through the gym. We will not track your location at any other time without your consent.]]></string>
+    <string name="about1"> If you do not grant the app the permission it requires, it will not function correctly. If you accidentally tell the app it cannot use your location, you can change this in the app settings found in the settings section of your device.
+That’s it. That’s all you have to do, the app will automatically start tracking your visits to the gym. </string>
+    <string name="about2">You can view summaries of your data in the app, as well as individual visits. We will also be sending you messages from time to time regarding the pilot which will be available in the messages tab to keep you updated with all the latest news.</string>
 
     <string name="title_activity_register">Register</string>
     <string name="dummy_button">Dummy Button</string>
@@ -70,4 +61,6 @@ That’s it. That’s all you have to do, the app will automatically start track
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="intro">Getting in touch is easy - we would love to hear from you. Please do not ever hesitate to contact us, for any feedback or complaints from using our service.</string>
+    <string name="email_adress">info@equidais.com</string>
 </resources>

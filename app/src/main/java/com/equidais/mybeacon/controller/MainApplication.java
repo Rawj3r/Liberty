@@ -187,7 +187,7 @@ public class MainApplication extends Application  implements BeaconManagerListen
             JSONParser jsonParser = new JSONParser();
             private static final String TAG_SUCCESS = "success";
             private static final String TAG_MESSAGE = "message";
-            private final String REG_URL = "http://masscash.empirestate.co.za/GenyaApi/X/untitled.php";
+            private final String REG_URL = "http://masscash.empirestate.co.za/gravity/untitled.php";
 
             @Override
             protected void onPreExecute() {
@@ -238,6 +238,8 @@ public class MainApplication extends Application  implements BeaconManagerListen
             });
 
     }
+
+
 
 
 }

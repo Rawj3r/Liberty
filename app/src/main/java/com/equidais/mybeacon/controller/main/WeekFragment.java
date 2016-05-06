@@ -7,12 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,12 +41,22 @@ public class WeekFragment extends Fragment {
     private int week_num_visits;
     TextView visits_count, avg_dur, curr_visit_dur, last_date;
     boolean mIsFinish = false;
+    public Context context = getContext();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("changeState");
+        getActivity().registerReceiver(broadcastReceiver, filter);
+        handler.sendEmptyMessageDelayed(0, 1000);
     }
 
     @Nullable
@@ -59,10 +72,6 @@ public class WeekFragment extends Fragment {
 
         showState();
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("changeState");
-        getActivity().registerReceiver(broadcastReceiver, filter);
-        handler.sendEmptyMessageDelayed(0, 1000);
 
         return view;
     }
@@ -76,7 +85,7 @@ public class WeekFragment extends Fragment {
     }
 
     public void showState(){
-        MainApplication application = (MainApplication)getActivity().getApplication();
+        MainApplication application = (MainApplication)getActivity().getApplicationContext();
         if (application.mState == MainApplication.STATE_INIT){
             curr_visit_dur.setText("0");
         }else if ((application.mState == MainApplication.STATE_IN_ROOM) || (application.mState == MainApplication.STATE_OUT_ROOM_ENTER_DOOR)){
@@ -100,6 +109,12 @@ public class WeekFragment extends Fragment {
         super.onDestroy();
         getActivity().unregisterReceiver(broadcastReceiver);
         mIsFinish = true;
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
 
     }
 
@@ -160,17 +175,40 @@ public class WeekFragment extends Fragment {
                 dialog.dismiss();
             }
 
-            try{
-                JSONArray jsonArray = object.getJSONArray("data");
-                JSONObject object1 = jsonArray.getJSONObject(0);
-                week_num_visits = object1.getInt("VisitCount");
-                avg_duration = object1.getString("AvgVisitDuration");
-                last_d = object1.getString("LastVisitDate");
-                Log.e("test", ""+week_num_visits);
 
-            }catch (JSONException d){
-                d.printStackTrace();
-            }
+
+                ConnectivityManager manager =  (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo info = manager.getActiveNetworkInfo();
+                boolean connected = info != null && info.isAvailable() && info.isConnectedOrConnecting();
+
+                if (connected){
+                    try{
+                        JSONArray jsonArray = object.getJSONArray("data");
+                        JSONObject object1 = jsonArray.getJSONObject(0);
+                        week_num_visits = object1.getInt("VisitCount");
+                        avg_duration = object1.getString("AvgVisitDuration");
+                        last_d = object1.getString("LastVisitDate");
+                        Log.e("test", ""+week_num_visits);
+
+                    }catch (JSONException d){
+                        d.printStackTrace();
+                    }
+                    if (info.getType() == ConnectivityManager.TYPE_WIMAX || info.getType() == ConnectivityManager.TYPE_MOBILE){
+
+                    }
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                    //set title
+                    builder.setTitle("Please retry");
+
+                    //set dialog message
+                    builder.setMessage("Please connect your device to the internet").setCancelable(true);
+                    // create alert dialog
+                    AlertDialog alertDialog = builder.create();
+                    // display dialog alert
+                    alertDialog.show();
+                }
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -180,6 +218,7 @@ public class WeekFragment extends Fragment {
                     last_date.setText(last_d);
                 }
             });
+
         }
     }
 

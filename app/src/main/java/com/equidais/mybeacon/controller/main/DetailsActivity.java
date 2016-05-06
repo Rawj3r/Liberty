@@ -1,5 +1,6 @@
 package com.equidais.mybeacon.controller.main;
 
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,8 @@ import com.equidais.mybeacon.controller.MainApplication;
 import com.sensoro.cloud.SensoroManager;
 
 public class DetailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private final Context CONTEXT = this;
 
     TabLayout tabLayout;
     Toolbar toolbar;
@@ -118,12 +121,33 @@ public class DetailsActivity extends AppCompatActivity implements NavigationView
         if (id == R.id.sum){
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+        }else if (id == R.id.nav_contact){
+            contact();
+        }else if (id == R.id.nav_about){
+            about();
         }
 
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
 
         return true;
+
+    }
+
+    private void about() {
+        final Dialog dialog = new Dialog(CONTEXT);
+        dialog.setContentView(R.layout.about_dialog);
+        dialog.setTitle("About us");
+
+        dialog.show();
+    }
+
+    private void contact() {
+        final Dialog dialog = new Dialog(CONTEXT);
+        dialog.setContentView(R.layout.fragment_contact_us2);
+        dialog.setTitle("Contact us");
+
+        dialog.show();
 
     }
 

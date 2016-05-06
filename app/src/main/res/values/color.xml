@@ -26,4 +26,5 @@
     <color name="half_transparent">#80444444</color>
     <color name="transparent">#00000000</color>
     <color name="greyDeviderBorderColor">#B6B6B6</color>
+    <color name="toolbarColor">#AA1111</color>
 </resources>
