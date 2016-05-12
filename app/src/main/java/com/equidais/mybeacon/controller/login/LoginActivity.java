@@ -67,7 +67,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     }
 
     public String loadSha(){
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Storedata", 0);
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("clockingapp", 0);
         String usermail = sharedPreferences.getString("username", "");
         return usermail;
     }
@@ -166,7 +166,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 ProgressDialog progressDialog;
 
 //                String LOGIN_URL = "http://masscash.empirestate.co.za/GenyaApi/X/index.php";
-                String LOGIN = "http://masscash.empirestate.co.za/gravity/login.php";
+                String LOGIN = "http://masscash.empirestate.co.za/GenyaApi/X/login.php";
 
                 private static final String TAG_SUCCESS = "success";
                 private static final String TAG_MESSAGE = "message";
@@ -232,27 +232,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
                     if (success == 1){
                         Log.d("Success", message);
-                        SharedPreferences sp = getSharedPreferences("Storedata", Context.MODE_PRIVATE);
+                        SharedPreferences sp = getSharedPreferences("clockingapp", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putString("username", email);
                         editor.commit();
-                        try{
-                            File saveData = new File("/sdcard/0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.txt");
-                            saveData.createNewFile();
 
-                            FileOutputStream fileOutputStream = new FileOutputStream(saveData);
-                            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
-
-                            outputStreamWriter.append(email);
-                            outputStreamWriter.close();
-                            fileOutputStream.close();
-
-//                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                            Log.e("File writing", fileOutputStream.toString());
-                        }catch (IOException e){
-                            e.printStackTrace();
-                            Log.e("File writing", e.toString());
-                        }
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

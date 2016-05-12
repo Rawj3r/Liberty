@@ -57,7 +57,7 @@ public class MainApplication extends Application  implements BeaconManagerListen
     }
 
     public String loadSha(){
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Storedata", 0);
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("clockingapp", 0);
         username = sharedPreferences.getString("username", "");
         return username;
     }
@@ -127,19 +127,9 @@ public class MainApplication extends Application  implements BeaconManagerListen
         Log.e(TAG, beaconUUID + " new beacon found");
 
         if (!beaconUUID.equals("")) {
-            if (mState == STATE_INIT){
-                mState = STATE_ENTER_DOOR;
-                if (mState == STATE_ENTER_DOOR){
-                    mState = STATE_IN_ROOM;
-                    mInTime = new Date();
-                    Log.e(TAG, "Enter Gym " + mInTime);
-                }
-            }else if (mState == STATE_OUT_ROOM_ENTER_DOOR){
-                mState = STATE_INIT;
-                mOutTime = new Date();
-                send();
-                Log.e(TAG, "Out room" + mOutTime);
-            }
+           if (mState == STATE_INIT){
+               send();
+           }
         }
 
     }
@@ -149,14 +139,7 @@ public class MainApplication extends Application  implements BeaconManagerListen
         Log.e(TAG, "gone");
         String beaconUUID = beacon.getProximityUUID();
         Log.e(TAG, beaconUUID + " has disappeared");
-
-        if (mState == STATE_INIT){
-            Log.e(TAG, "Bye I am leaving");
-        }
-
-        if (mState == STATE_IN_ROOM ){
-            mState = STATE_OUT_ROOM_ENTER_DOOR;
-        }
+        mState = STATE_INIT;
 
     }
 
@@ -187,7 +170,7 @@ public class MainApplication extends Application  implements BeaconManagerListen
             JSONParser jsonParser = new JSONParser();
             private static final String TAG_SUCCESS = "success";
             private static final String TAG_MESSAGE = "message";
-            private final String REG_URL = "http://masscash.empirestate.co.za/gravity/untitled.php";
+            private final String REG_URL = "http://masscash.empirestate.co.za/GenyaApi/X/untitled.php";
 
             @Override
             protected void onPreExecute() {
@@ -200,7 +183,6 @@ public class MainApplication extends Application  implements BeaconManagerListen
                     HashMap<String, String> hashMap = new HashMap<>();
                     hashMap.put("user_mail", loadSha());
                     hashMap.put("time_in", GlobalFunc.getStringParamDate(mInTime));
-                    hashMap.put("time_out", GlobalFunc.getStringParamDate(mOutTime));
 
                     Log.e("request", "sending beacon time");
                     JSONObject jsonObject = jsonParser.makeHttpRequest(REG_URL, "POST", hashMap);
@@ -226,6 +208,7 @@ public class MainApplication extends Application  implements BeaconManagerListen
            // map.put("deviceudid", GlobalFunc.getDeviceUDID(this));
             map.put("timein", GlobalFunc.getStringParamDate(mInTime));
             ApiClient.getApiClient().sendData(map, new Callback<Integer>() {
+                
                 @Override
                 public void success(Integer integer, Response response) {
 

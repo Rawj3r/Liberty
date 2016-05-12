@@ -37,7 +37,7 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
 
     private Spinner spinner;
     private ArrayList<Company> companies;
-    private String URL_COMPANIES = "http://masscash.empirestate.co.za/gravity/firm.php";
+    private String URL_COMPANIES = "http://masscash.empirestate.co.za/GenyaApi/X/firm.php";
 
 
     @Override
@@ -126,7 +126,7 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
 
                 private static final String TAG_SUCCESS = "success";
                 private static final String TAG_MESSAGE = "message";
-                private final String REG_URL = "http://masscash.empirestate.co.za/gravity/register.php";
+                private final String REG_URL = "http://masscash.empirestate.co.za/GenyaApi/X/register.php";
 
                 @Override
                 protected void onPreExecute() {
@@ -269,7 +269,7 @@ public class Register extends BaseActivity implements View.OnClickListener, Adap
             stringList.add(companies.get(i).getCname());
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
